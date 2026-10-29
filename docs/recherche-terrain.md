@@ -98,17 +98,18 @@
 
 ## 7. Tensions
 
-### Tranchées le 29/10/2026 (voir [decisions.md](decisions.md))
+### Tranchées le 29/10/2026
 
 - **Vocabulaire : on parle de foyer, pas de couple.** La cible, ce sont les personnes qui partagent un logement (couple, colocation, famille) ou qui vivent seules.
 - **Limite de 100 objets face à un dressing d'environ 170 pièces : on assume le mur comme déclencheur du premium.** À surveiller : le taux d'abandon au mur. Le mur ne doit jamais bloquer l'accès aux objets déjà saisis.
 - **Dressing : c'est une catégorie, pas un module à part.** C'est la catégorie « Dressing & Vêtements » (FR-012), avec des champs en plus (FR-006 : type, saison, couleur, statut). Elle passe par le même ajout rapide.
 - **La spec fait foi.** Les champs obligatoires sont le nom, la pièce et la catégorie (FR-001) ; la photo est facultative (FR-002). La stack est celle du plan et de la constitution. Pour tenir les 10 s malgré 3 champs obligatoires, pièce et catégorie doivent être gardées d'un objet à l'autre pendant l'ajout enchaîné (US1, « ajouter un autre objet »).
 
-### Encore ouvertes
+- **Partage du foyer : gratuit jusqu'à 2 membres, premium au-delà.** Le foyer typique à deux (Léa et Marc) partage sans payer.
 
-1. **Le partage du foyer est en premium, alors que la cible n°1 est un foyer de plusieurs personnes.** Si les membres d'un foyer qui met ses affaires en commun ne peuvent pas partager gratuitement, la promesse « éviter les doublons dans le foyer » ne marche pas. Options : partage gratuit à 2 membres et premium au-delà, ou partage gratuit en lecture seule.
-2. **Accroche « assurance » ou accroche « je sais ce que j'ai » ?** La recherche penche pour la seconde, avec l'assurance en bénéfice secondaire.
+### Encore ouverte
+
+- **Accroche « assurance » ou accroche « je sais ce que j'ai » ?** La recherche penche pour la seconde, avec l'assurance en bénéfice secondaire.
 
 ## 8. Ce qu'on ne sait pas encore (à valider en entretien)
 

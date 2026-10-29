@@ -7,7 +7,7 @@
 ## Content Quality
 
 - [x] Aligned with decisions of 29/10/2026: Vocabulary is strictly "Foyer" and "Membres du foyer" (no couple/partner restrictions)
-- [x] Personas integrated: Léa (21 ans, primaire), Marc (31 ans, secondaire, factures/garanties), Sarah (25 ans, solo, dressing)
+- [x] Personas integrated: Léa (28 ans, primaire), Marc (31 ans, secondaire, factures/garanties), Sarah (25 ans, solo, dressing)
 - [x] 3 mandatory fields strictly defined: `nom`, `pièce`, `catégorie`
 - [x] Photo explicitly defined as OPTIONAL (FR-002, no forced détourage)
 - [x] Chained add ("Ajouter un autre objet") with retention of room and category specified (FR-009, SC-002)

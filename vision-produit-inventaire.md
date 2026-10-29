@@ -116,4 +116,4 @@ Au fil des années, un foyer accumule des centaines d'objets : meubles, électro
 
 1. **Mobile ou web ?** L'inventaire se fait en photographiant les objets, donc le mobile-first semble logique (React Native ou PWA). À trancher lors de l'architecture.
 2. **IA (reconnaissance d'objets par photo) dès le MVP ?** Très différenciant mais complexe. On peut d'abord simuler avec une saisie manuelle rapide.
-3. ~~**Le dressing : fonctionnalité ou module séparé ?**~~ Tranché le 29/10/2026 : c'est une **catégorie enrichie**, pas un module à part (voir `docs/decisions.md`).
+3. ~~**Le dressing : fonctionnalité ou module séparé ?**~~ Tranché le 29/10/2026 : c'est une **catégorie enrichie**, pas un module à part (voir `docs/recherche-terrain.md`, section 7).

@@ -89,7 +89,7 @@ backend/
 │   ├── services/
 │   │   ├── item.service.ts    # Fast-Add, duplicate detection, filters, 100-item cap
 │   │   ├── household.service.ts# Invite code generation & member linking
-│   │   └── dashboard.service.ts# North Star Metric, room progress, value calculations
+│   │   └── dashboard.service.ts# North Star Metric, item count per room, value calculations
 │   ├── controllers/
 │   │   ├── item.controller.ts # Item & duplicate check endpoints
 │   │   ├── room.controller.ts
@@ -138,7 +138,7 @@ frontend/
 │   │   │   └── DeclutterModal.tsx    # Mark item as "To sell / donate"
 │   │   └── dashboard/
 │   │       ├── NorthStarCard.tsx     # Total items metric card
-│   │       ├── RoomProgressBar.tsx   # Cataloging progress by room
+│   │       ├── RoomCountList.tsx     # Item count per room
 │   │       └── InsuranceSummary.tsx  # Optional total value calculation
 │   ├── pages/
 │   │   ├── OverviewPage.tsx   # Central inventory (by room & by category)

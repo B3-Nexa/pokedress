@@ -7,14 +7,14 @@
 
 | | Persona | Rôle | Douleur n°1 | Fonctionnalité clé |
 |---|---|---|---|---|
-| 1 | **Léa, 21 ans** | **primaire** (déjà dans la vision) | foyer qui vient de se former, affaires mises en commun, doublons | inventaire partagé + anti-doublon |
+| 1 | **Léa, 28 ans** | **primaire** (déjà dans la vision) | foyer qui vient de se former, affaires mises en commun, doublons | inventaire partagé + anti-doublon |
 | 2 | **Marc, 31 ans** | secondaire, autre membre du foyer de Léa | factures et garanties éparpillées, peu motivé pour saisir | saisie rapide, fiche enrichie *plus tard* |
 | 3 | **Sarah, 25 ans** | secondaire, foyer d'une personne | dressing qu'elle ne connaît pas, rachète ce qu'elle a | catégorie Dressing + recherche en magasin |
 | — | **Anti-personas** | hors cible | — | ce qu'on refuse de construire |
 
 ---
 
-## 1. Léa, 21 ans : « On a tout en double et je ne sais pas ce qu'on a »
+## 1. Léa, 28 ans : « On a tout en double et je ne sais pas ce qu'on a »
 
 **Persona primaire.** Chaque arbitrage se fait d'abord pour elle.
 
@@ -44,11 +44,11 @@
 
 **Ce qui la ferait abandonner**
 - Plus que les 3 champs obligatoires de la spec (nom, pièce, catégorie) à chaque objet.
-- Le partage payant alors que l'inventaire concerne tout le foyer.
+- Le partage payant alors que l'inventaire concerne tout le foyer (écarté : gratuit jusqu'à 2 membres).
 - Ne voir aucun bénéfice avant la 50e saisie.
 
 **Ancrage terrain**
-- Les 25-34 ans sont la tranche qui déménage le plus (INSEE). À 21 ans, Léa est plus jeune que la cible de la vision (25-40 ans).
+- Les 25-34 ans sont la tranche qui déménage le plus (INSEE) : Léa est en plein dedans.
 - 54 % déclarent des doublons quand deux personnes emménagent ensemble (sondage américain de 2010, à revérifier).
 - Voir un objet qu'on possède déjà réduit l'intention d'acheter (Raffaelli & Liu, 2024).
 
@@ -188,5 +188,6 @@ Point de vigilance : la spec modélise un niveau « contenant » facultatif (pi�
 
 **Lecture**
 - Le **socle commun** aux trois personas : ajout rapide, ajout enchaîné, recherche. C'est le cœur du MVP.
-- Le **partage** est indispensable dès que le foyer compte plus d'une personne. Le mettre en premium touche la persona primaire. C'est le seul point encore ouvert (voir « Tensions » dans la recherche).
+- Le **partage** est indispensable dès que le foyer compte plus d'une personne. Il est **gratuit jusqu'à 2 membres** (décision du 29/10/2026), donc le foyer de Léa et Marc n'a pas à payer pour partager.
+- Les critères d'acceptation correspondants sont dans [criteres-acceptation.md](criteres-acceptation.md).
 - Le **dressing** n'est pas un module à part : c'est la catégorie « Dressing & Vêtements » (FR-012) avec des champs en plus, et il passe par le même ajout rapide.

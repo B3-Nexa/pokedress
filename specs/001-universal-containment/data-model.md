@@ -80,10 +80,11 @@ export interface IItem {
   name: string; // "Pull col roulé noir", "Rallonge 5m", "Grille-pain"
   category: CategoryKey;
   photo_url?: string | null; // Optional raw image URL (no forced détourage)
-  quantity: number; // Defaults to 1
+  quantity: number; // Defaults to 1 — a record always counts as 1 item (counters, 100-item cap)
   
   // Specific to Dressing category (Lifecycle)
-  dressing_status?: DressingStatus | null;
+  dressing_status?: DressingStatus | null; // Defaults to 'active' for dressing_vetements, set manually
+  resale_price?: number | null; // Optional target resale price (Vinted / donation list)
   clothing_type?: string | null; // "pull", "pantalon", "robe", "manteau"
   size?: string | null; // "M", "38", etc.
   season?: 'printemps_ete' | 'automne_hiver' | 'toute_saison' | null;
@@ -131,6 +132,7 @@ export const fastAddItemSchema = z.object({
   
   // Optional Dressing attributes
   dressing_status: z.enum(['active', 'dormant', 'to_sell_or_donate']).optional().nullable(),
+  resale_price: z.number().min(0).optional().nullable(),
   clothing_type: z.string().optional().nullable(),
   size: z.string().optional().nullable(),
   season: z.enum(['printemps_ete', 'automne_hiver', 'toute_saison']).optional().nullable(),
