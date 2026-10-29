@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  button, a {
+    @apply touch-manipulation;
+  }
+}
+
+/* Ensure mobile 375px responsive padding and minimum touch targets [CA-0.3] */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
