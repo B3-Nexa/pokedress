@@ -1,0 +1,180 @@
+openapi: 3.0.3
+info:
+  title: Household Inventory API (PokeDress)
+  version: 2.0.0
+  description: REST API for household inventory, fast-add flow, duplicate detection, dressing lifecycle, and collaborative spaces.
+paths:
+  /api/items:
+    post:
+      summary: Fast-Add an item (< 10s flow)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, room_id, category]
+              properties:
+                name: { type: string, example: "Grille-pain 4 fentes" }
+                room_id: { type: string, example: "6720f1234..." }
+                category: 
+                  type: string
+                  enum: [dressing, meubles_deco, electromenager, vaisselle, hightech, outils_bricolage, loisirs_livres, autre]
+                container_id: { type: string, nullable: true }
+                photo_url: { type: string, nullable: true }
+                quantity: { type: integer, default: 1 }
+                dressing_status: 
+                  type: string
+                  enum: [active, dormant, to_sell_or_donate]
+                purchase_price: { type: number, nullable: true, example: 39.99 }
+                brand: { type: string, nullable: true }
+                notes: { type: string, nullable: true }
+      responses:
+        '201':
+          description: Item cataloged successfully
+    get:
+      summary: Query household items with filters and search
+      parameters:
+        - name: room_id
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: dressing_status
+          in: query
+          schema: { type: string, enum: [active, dormant, to_sell_or_donate] }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Array of matching items
+
+  /api/items/check-duplicates:
+    get:
+      summary: Proactive anti-duplicate query
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema: { type: string, example: "rallonge" }
+      responses:
+        '200':
+          description: List of potential duplicate items already owned in the household
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    name: { type: string }
+                    room_name: { type: string }
+                    category: { type: string }
+                    photo_url: { type: string, nullable: true }
+
+  /api/items/{id}:
+    get:
+      summary: Get item details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Item details
+    patch:
+      summary: Update item (or toggle dressing lifecycle status)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                room_id: { type: string }
+                container_id: { type: string, nullable: true }
+                category: { type: string }
+                dressing_status: { type: string, enum: [active, dormant, to_sell_or_donate] }
+                purchase_price: { type: number, nullable: true }
+      responses:
+        '200':
+          description: Item updated
+    delete:
+      summary: Delete an item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Deleted
+
+  /api/rooms:
+    get:
+      summary: List all rooms in household with item counts
+      responses:
+        '200':
+          description: Array of rooms with counts
+    post:
+      summary: Create a new room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string, example: "Dressing" }
+                icon: { type: string, default: "door" }
+      responses:
+        '201':
+          description: Room created
+
+  /api/dashboard:
+    get:
+      summary: Executive summary of household inventory
+      responses:
+        '200':
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_items: { type: integer, example: 142 }
+                  total_value: { type: number, example: 7850.50 }
+                  items_by_room: { type: object }
+                  items_by_category: { type: object }
+                  dressing_stats:
+                    type: object
+                    properties:
+                      total_clothes: { type: integer }
+                      dormant_count: { type: integer }
+                      to_sell_count: { type: integer }
+
+  /api/household:
+    get:
+      summary: Get current household details and invite code
+      responses:
+        '200':
+          description: Household details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  name: { type: string }
+                  invite_code: { type: string, example: "K9X2P4" }
+                  members: { type: array }
