@@ -89,11 +89,11 @@ As a household creator (Léa), I want to invite other household members (Marc, c
 
 ### User Story 6 - Household Dashboard, Factures & 100-Item Cap (Priority: P3)
 
-As a household member, I want to view our North Star Metric (total cataloged items), track room progress, enrich items later with receipts/warranties ("compléter plus tard"), and see an estimated total value for home insurance, with the guarantee that passing 100 items never blocks reading existing data.
+As a household member, I want to view our North Star Metric (total cataloged items), see the item count per room, enrich items later with receipts/warranties ("compléter plus tard"), and see an estimated total value for home insurance, with the guarantee that passing 100 items never blocks reading existing data.
 
 **Why this priority**: Secondary motivation (insurance, warranty tracking for Marc) and clear freemium governance.
 
-**Independent Test**: Open Dashboard, view total item count card, progress bars, optional total value sum, and verify already cataloged items remain 100% readable even above 100 items.
+**Independent Test**: Open Dashboard, view total item count card, item count per room, optional total value sum, and verify already cataloged items remain 100% readable even above 100 items.
 
 **Acceptance Scenarios**:
 
@@ -107,7 +107,9 @@ As a household member, I want to view our North Star Metric (total cataloged ite
 - **Chained Add Room/Category Switch**: When adding in chained mode, can the user change room or category? Yes, changing either field immediately updates the retained context for subsequent items.
 - **Photo Upload Failure or Offline**: If photo compression or upload fails, the item's metadata (name, room, category) is still saved safely.
 - **Multiple Duplicate Matches**: If 5 similar items exist, the duplicate banner shows the count and top 2 with a "Voir tout" popover.
-- **Non-blocking 100-Item Freemium Wall**: When hitting 100 items, the user is politely prompted to upgrade for unlimited items, but existing items are never locked or hidden.
+- **Non-blocking 100-Item Freemium Wall**: When hitting 100 items, the user is politely prompted to upgrade for unlimited items, but existing items are never locked or hidden. From 90 items, a discreet banner shows how many items remain on the free tier.
+- **Item Counting**: One item record counts as 1 item regardless of its `quantity` (e.g. "Verre × 6" = 1 item) for counters, the North Star Metric, and the 100-item cap.
+- **First Launch / Empty Household**: When a household is created, 5 default rooms are seeded ("Salon", "Cuisine", "Chambre", "Salle de bain", "Cave/Garage") so the Fast-Add room selector is never empty, and the overview shows a clear call to add the first item.
 
 ## Requirements *(mandatory)*
 
@@ -118,11 +120,11 @@ As a household member, I want to view our North Star Metric (total cataloged ite
 - **FR-003**: All detailed and financial fields (`purchase_price`, `purchase_date`, `warranty_expiry`, `receipt_photo`, `brand`, `notes`) MUST remain optional ("compléter plus tard").
 - **FR-004**: The system MUST structure inventory under a 3-level model: `Room / Pièce` (mandatory) -> `Container / Meuble` (optional) -> `Item / Objet`.
 - **FR-005**: The system MUST perform real-time, debounced similarity checks on item names to surface potential duplicates during item creation and search.
-- **FR-006**: The "Dressing & Vêtements" category MUST support clothing lifecycle statuses (`active`, `dormant`, `to_sell_or_donate`) with 1-click status transitions.
+- **FR-006**: The "Dressing & Vêtements" category MUST support clothing lifecycle statuses (`active`, `dormant`, `to_sell_or_donate`) with 1-click status transitions. New clothing items default to `active`; status changes are manual (no automatic "dormant" detection in the MVP). Items flagged `to_sell_or_donate` accept an optional `resale_price`.
 - **FR-007**: The system MUST scope all inventory data to a `Household` (Foyer) entity, supporting shared collaboration (free tier includes 2 members).
 - **FR-008**: The system MUST generate a 6-character alphanumeric invite code allowing household members to join in < 30 seconds.
 - **FR-009**: The Fast-Add flow MUST support Chained Add ("Ajouter un autre objet"), retaining the previous `room_id` and `category` across sequential additions.
-- **FR-010**: The system MUST calculate and display the North Star Metric (total cataloged items in the household) and room cataloging progress on the dashboard.
+- **FR-010**: The system MUST calculate and display the North Star Metric (total cataloged items in the household) and the item count per room on the dashboard (no percentage or progress bar, since no per-room target exists).
 - **FR-011**: The system MUST provide instant full-text search across all household items by name, room, category, or tag in < 200ms.
 - **FR-012**: The system MUST support pre-configured home categories: `Dressing & Vêtements`, `Meubles & Déco`, `Électroménager`, `Vaisselle & Cuisine`, `High-Tech`, `Bricolage & Outils`, `Loisirs & Livres`, `Autre`.
 - **FR-013**: The system MUST enforce a 100-item creation cap for free households without ever blocking read, view, or search access to existing items.
@@ -138,7 +140,7 @@ As a household member, I want to view our North Star Metric (total cataloged ite
 - **Container**: Optional furniture, wardrobe, or box inside a room.
   - Attributes: `id`, `household_id`, `room_id`, `name` (e.g. "Vaisselier", "Penderie", "Caisse n°1"), `type`.
 - **Item**: Any cataloged possession.
-  - Attributes: `id`, `household_id`, `room_id`, `container_id` (nullable), `name`, `category`, `photo_url` (nullable), `quantity` (default 1), `dressing_status` (nullable: `active` | `dormant` | `to_sell_or_donate`), `purchase_price` (nullable), `purchase_date` (nullable), `warranty_expiry` (nullable), `receipt_photo_url` (nullable), `brand` (nullable), `notes` (nullable), `created_at`, `updated_at`.
+  - Attributes: `id`, `household_id`, `room_id`, `container_id` (nullable), `name`, `category`, `photo_url` (nullable), `quantity` (default 1), `dressing_status` (nullable: `active` | `dormant` | `to_sell_or_donate`, defaults to `active` for clothing), `resale_price` (nullable), `purchase_price` (nullable), `purchase_date` (nullable), `warranty_expiry` (nullable), `receipt_photo_url` (nullable), `brand` (nullable), `notes` (nullable), `created_at`, `updated_at`.
 
 ## Success Criteria *(mandatory)*
 
@@ -154,4 +156,6 @@ As a household member, I want to view our North Star Metric (total cataloged ite
 
 - **A-001**: Web application responsive on mobile browsers (allowing on-the-spot camera usage in rooms) and desktop browsers.
 - **A-002**: Photo storage in development uses local file upload (Multer to `backend/uploads/`), swappable for S3/Cloudinary in production.
-- **A-003**: Personas: Léa (21 ans, communicante, emménagement récent, persona primaire), Marc (31 ans, technicien réseau, second membre du foyer, factures/garanties), Sarah (25 ans, foyer solo, dressing et mur des 100 objets).
+- **A-003**: Personas: Léa (28 ans, communicante, emménagement récent, persona primaire), Marc (31 ans, technicien réseau, second membre du foyer, factures/garanties), Sarah (25 ans, foyer solo, dressing et mur des 100 objets).
+- **A-004**: The insurance PDF export (premium feature in the product vision) is out of MVP scope.
+- **A-005**: Acceptance criteria for all user stories are detailed in `docs/criteres-acceptation.md`.

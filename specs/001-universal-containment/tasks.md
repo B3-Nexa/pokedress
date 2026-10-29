@@ -143,9 +143,9 @@ description: "Task list for household inventory system aligned with Product Visi
 
 ## Phase 8: User Story 6 - Household Dashboard, Factures & 100-Item Cap (Priority: P3)
 
-**Goal**: Display total cataloged items (North Star Metric), room progress, "compléter plus tard" warranty/receipt tracking (Marc), and non-blocking 100-item ceiling.
+**Goal**: Display total cataloged items (North Star Metric), item count per room, "compléter plus tard" warranty/receipt tracking (Marc), and non-blocking 100-item ceiling.
 
-**Independent Test**: Open Dashboard, view total item count card, progress bars, warranty alerts, and verify search/browse remain unrestricted above 100 items.
+**Independent Test**: Open Dashboard, view total item count card, item count per room, warranty alerts, and verify search/browse remain unrestricted above 100 items.
 
 ### Tests for User Story 6
 - [ ] T040 [P] [US6] Integration tests for dashboard aggregation metrics and warranty tracking in `backend/tests/integration/dashboard.api.test.ts`
@@ -154,10 +154,10 @@ description: "Task list for household inventory system aligned with Product Visi
 - [ ] T041 [US6] Implement `GET /api/dashboard` computing total items, insurance sum, and dressing stats in `backend/src/services/dashboard.service.ts`
 - [ ] T042 [US6] Build NorthStarCard component displaying total items in `frontend/src/components/dashboard/NorthStarCard.tsx`
 - [ ] T043 [US6] Build ItemEnrichmentModal (attach receipt photo, warranty date) in `frontend/src/components/inventory/ItemEnrichmentModal.tsx`
-- [ ] T044 [US6] Build InsuranceSummary and RoomProgressBar components in `frontend/src/components/dashboard/InsuranceSummary.tsx` and `frontend/src/components/dashboard/RoomProgressBar.tsx`
+- [ ] T044 [US6] Build InsuranceSummary and RoomCountList components in `frontend/src/components/dashboard/InsuranceSummary.tsx` and `frontend/src/components/dashboard/RoomCountList.tsx`
 - [ ] T045 [US6] Build DashboardPage in `frontend/src/pages/DashboardPage.tsx`
 
-**Checkpoint**: Executive household dashboard tracking progress, warranties, and insurance value.
+**Checkpoint**: Executive household dashboard tracking item counts, warranties, and insurance value.
 
 ---
 

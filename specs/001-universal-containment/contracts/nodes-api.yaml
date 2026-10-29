@@ -26,6 +26,7 @@ paths:
                 dressing_status: 
                   type: string
                   enum: [active, dormant, to_sell_or_donate]
+                resale_price: { type: number, nullable: true, example: 15 }
                 clothing_type: { type: string, nullable: true }
                 size: { type: string, nullable: true }
                 season: { type: string, enum: [printemps_ete, automne_hiver, toute_saison], nullable: true }
