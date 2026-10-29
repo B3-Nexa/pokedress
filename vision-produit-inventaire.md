@@ -31,17 +31,19 @@ Au fil des années, un foyer accumule des centaines d'objets : meubles, électro
 
 | | Description |
 |---|---|
-| **Cible prioritaire (MVP)** | Jeunes actifs et couples de 25 à 40 ans qui viennent d'emménager ou de s'installer ensemble. À l'aise avec le mobile, ils accumulent rapidement des biens. |
+| **Cible prioritaire (MVP)** | Jeunes actifs de 25 à 40 ans dont le foyer vient de se former : emménagement seul, en colocation ou à plusieurs. À l'aise avec le mobile, ils accumulent rapidement des biens. |
 | **Cibles secondaires** | Familles (beaucoup d'objets, plusieurs personnes), propriétaires (biens de valeur à assurer), passionnés de mode (dressing important). |
 
 ### Persona
 
-> **Léa, 28 ans**, vient d'emménager avec son compagnon. Ils ont fusionné deux appartements, ne savent plus ce qu'ils ont en double, et elle a déjà racheté des vêtements qu'elle possédait. Elle aimerait enfin savoir ce qu'ils ont vraiment chez eux.
+> **Léa, 28 ans**, vient de former un nouveau foyer. Ses affaires et celles de Marc, l'autre membre du foyer, ont été mises en commun : ils ne savent plus ce qu'ils ont en double, et elle a déjà racheté des vêtements qu'elle possédait. Elle aimerait enfin savoir ce que le foyer possède vraiment.
+>
+> Personas détaillées : [docs/personas.md](docs/personas.md).
 
 ### Pourquoi cette cible ?
 
 - Le moment où l'on **emménage** est un déclencheur naturel : on manipule tous ses objets, donc l'effort de saisie paraît logique.
-- Le **couple** justifie le partage d'un inventaire commun, ce qui correspond au « chez nous ».
+- Le **foyer** (toutes les personnes qui partagent le logement) justifie le partage d'un inventaire commun, ce qui correspond au « chez nous ».
 - Ces utilisateurs sont **faciles à atteindre** pour un projet de cours (entourage, réseaux sociaux, groupes étudiants et jeunes actifs).
 
 ---
@@ -114,4 +116,4 @@ Au fil des années, un foyer accumule des centaines d'objets : meubles, électro
 
 1. **Mobile ou web ?** L'inventaire se fait en photographiant les objets, donc le mobile-first semble logique (React Native ou PWA). À trancher lors de l'architecture.
 2. **IA (reconnaissance d'objets par photo) dès le MVP ?** Très différenciant mais complexe. On peut d'abord simuler avec une saisie manuelle rapide.
-3. **Le dressing : fonctionnalité ou module séparé ?** Intégré ici comme une catégorie enrichie, mais il pourrait justifier sa propre section.
+3. ~~**Le dressing : fonctionnalité ou module séparé ?**~~ Tranché le 29/10/2026 : c'est une **catégorie enrichie**, pas un module à part (voir `docs/decisions.md`).
