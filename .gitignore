@@ -23,6 +23,8 @@ coverage/
 # Vite & Frontend caches
 .vite/
 .eslintcache
+.cache/
+backend/.cache/
 
 # Uploads & User Media (Photos d'objets en local)
 uploads/
