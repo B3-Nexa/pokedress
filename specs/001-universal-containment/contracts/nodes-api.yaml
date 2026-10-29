@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: Household Inventory API (PokeDress)
-  version: 2.0.0
-  description: REST API for household inventory, fast-add flow, duplicate detection, dressing lifecycle, and collaborative spaces.
+  version: 2.1.0
+  description: REST API for household inventory, fast-add flow, chained entry, anti-duplicate detection, dressing lifecycle, and collaborative spaces.
 paths:
   /api/items:
     post:
@@ -19,19 +19,27 @@ paths:
                 room_id: { type: string, example: "6720f1234..." }
                 category: 
                   type: string
-                  enum: [dressing, meubles_deco, electromenager, vaisselle, hightech, outils_bricolage, loisirs_livres, autre]
+                  enum: [dressing_vetements, meubles_deco, electromenager, vaisselle_cuisine, hightech, outils_bricolage, loisirs_livres, autre]
                 container_id: { type: string, nullable: true }
                 photo_url: { type: string, nullable: true }
                 quantity: { type: integer, default: 1 }
                 dressing_status: 
                   type: string
                   enum: [active, dormant, to_sell_or_donate]
+                clothing_type: { type: string, nullable: true }
+                size: { type: string, nullable: true }
+                season: { type: string, enum: [printemps_ete, automne_hiver, toute_saison], nullable: true }
                 purchase_price: { type: number, nullable: true, example: 39.99 }
+                purchase_date: { type: string, format: date-time, nullable: true }
+                warranty_expiry: { type: string, format: date-time, nullable: true }
+                receipt_photo_url: { type: string, nullable: true }
                 brand: { type: string, nullable: true }
                 notes: { type: string, nullable: true }
       responses:
         '201':
           description: Item cataloged successfully
+        '403':
+          description: Free tier 100-item ceiling reached (upgrade required)
     get:
       summary: Query household items with filters and search
       parameters:
@@ -49,7 +57,7 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Array of matching items
+          description: Array of matching items (never blocked by 100-item cap)
 
   /api/items/check-duplicates:
     get:
@@ -87,7 +95,7 @@ paths:
         '200':
           description: Item details
     patch:
-      summary: Update item (or toggle dressing lifecycle status)
+      summary: Update item (or toggle dressing lifecycle status / complete later fields)
       parameters:
         - name: id
           in: path
@@ -105,6 +113,8 @@ paths:
                 category: { type: string }
                 dressing_status: { type: string, enum: [active, dormant, to_sell_or_donate] }
                 purchase_price: { type: number, nullable: true }
+                warranty_expiry: { type: string, format: date-time, nullable: true }
+                receipt_photo_url: { type: string, nullable: true }
       responses:
         '200':
           description: Item updated
@@ -178,3 +188,5 @@ paths:
                   name: { type: string }
                   invite_code: { type: string, example: "K9X2P4" }
                   members: { type: array }
+                  item_count: { type: integer }
+                  plan: { type: string, example: "free" }

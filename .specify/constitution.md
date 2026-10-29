@@ -2,9 +2,10 @@
 
 Consultez la constitution officielle et ratifiée dans [.specify/memory/constitution.md](memory/constitution.md).
 
-### Résumé des 5 Règles d'Or :
-1. **Frictionless Fast-Add (< 10s)** : La saisie doit prendre moins de 10 secondes (Photo + Nom + Pièce + Catégorie). Champs optionnels légers pour éviter tout abandon.
-2. **Household-First Collaboration ("Chez Nous")** : Modèle centré sur le Foyer (`household_id`). Léa et son conjoint partagent le même inventaire commun.
-3. **Prévention active des doublons** : L'app répond à la question *"Qu'est-ce qu'on a déjà ?"* et détecte les doublons avant un rachat inutile.
-4. **Cycle de vie & Dressing intelligent** : Suivi de l'usage des vêtements (actif, dormant / jamais porté, à donner / revendre).
-5. **Typage strict & Qualité Test-First** : TypeScript, Zod, MongoDB, et tests automatisés sur la détection de doublons, les agrégations de valeur et l'isolation des foyers.
+### Résumé des Principes Directeurs (v2.1.0) :
+1. **Frictionless Fast-Add (< 10s)** : 3 champs obligatoires seulement (`nom`, `pièce`, `catégorie`). Photo **facultative** (sans détourage imposé). Mode ajout enchaîné conservant la pièce et la catégorie d'un objet à l'autre.
+2. **Household-First ("Le Foyer")** : Vocabulaire centré sur le Foyer (`household_id`) : couple, colocation, famille ou personne seule. Partage inclus jusqu'à 2 membres en gratuit.
+3. **Prévention active des doublons** : Répond à la question *"Qu'est-ce qu'on a déjà chez nous ?"* et alerte avant tout rachat inutile.
+4. **Dressing = Catégorie enrichie** : Cycle de vie des vêtements (actif, dormant / jamais porté, à donner / revendre sur Vinted).
+5. **Mur des 100 objets non bloquant en lecture** : Au-dessus de 100 objets (freemium), la consultation et la recherche restent toujours 100% accessibles.
+6. **Typage strict & Qualité Test-First** : TypeScript, Zod, MongoDB, et tests automatisés.

@@ -6,13 +6,14 @@
 ## 1. Collections & TypeScript Interfaces
 
 ### Collection 1: `households` (Le Foyer)
-Represents the shared household space for Léa and her partner.
+Represents the shared living unit (couple, colocation, famille, personne seule).
 
 ```typescript
 export interface IHousehold {
   _id: string; // Mongo ObjectId
-  name: string; // e.g. "Chez Léa & Marc"
+  name: string; // e.g. "Chez Léa & Marc", "Coloc Gambetta"
   invite_code: string; // 6-character uppercase alphanumeric code (e.g. "LEA28X")
+  plan: 'free' | 'premium'; // Defaults to 'free' (max 100 items, 2 members)
   created_at: Date;
   updated_at: Date;
 }
@@ -24,7 +25,7 @@ export interface IUser {
   _id: string;
   household_id: string; // References Household._id
   email: string;
-  name: string;
+  name: string; // e.g. "Léa", "Marc"
   password_hash: string;
   role: 'owner' | 'member';
   created_at: Date;
@@ -36,16 +37,14 @@ export interface IUser {
 export interface IRoom {
   _id: string;
   household_id: string;
-  name: string; // "Salon", "Cuisine", "Chambre", "Dressing", "Garage/Cave"
-  icon: string; // Lucide icon identifier (e.g. "sofa", "utensils", "bed", "warehouse")
+  name: string; // "Salon", "Cuisine", "Chambre", "Dressing", "Cave", "Garage"
+  icon: string; // Lucide icon identifier (e.g. "sofa", "utensils", "bed", "shirt", "warehouse")
   order: number;
   created_at: Date;
 }
 ```
 
 ### Collection 4: `containers` (Meubles & Caisses - Optionnel)
-Permet de préciser où dans la pièce l'objet se trouve (Vaisselier, Penderie, Caisse n°2).
-
 ```typescript
 export interface IContainer {
   _id: string;
@@ -58,14 +57,14 @@ export interface IContainer {
 ```
 
 ### Collection 5: `items` (Objets du Foyer)
-The central entity cataloging all possessions.
+The central entity cataloging all household possessions.
 
 ```typescript
 export type CategoryKey = 
-  | 'dressing' 
+  | 'dressing_vetements' 
   | 'meubles_deco' 
   | 'electromenager' 
-  | 'vaisselle' 
+  | 'vaisselle_cuisine' 
   | 'hightech' 
   | 'outils_bricolage' 
   | 'loisirs_livres'
@@ -77,22 +76,23 @@ export interface IItem {
   _id: string;
   household_id: string;
   room_id: string; // Mandatory: which room it is in
-  container_id?: string | null; // Optional: which furniture/box it is in
+  container_id?: string | null; // Optional: furniture or crate
   name: string; // "Pull col roulé noir", "Rallonge 5m", "Grille-pain"
   category: CategoryKey;
-  photo_url?: string | null; // Thumbnail image URL
+  photo_url?: string | null; // Optional raw image URL (no forced détourage)
   quantity: number; // Defaults to 1
   
-  // Specific to Dressing module (Lifecycle)
+  // Specific to Dressing category (Lifecycle)
   dressing_status?: DressingStatus | null;
-  clothing_type?: string; // "pull", "pantalon", "robe", "manteau", "chaussures"
-  size?: string; // "M", "38", etc.
-  season?: 'printemps_ete' | 'automne_hiver' | 'toute_saison';
+  clothing_type?: string | null; // "pull", "pantalon", "robe", "manteau"
+  size?: string | null; // "M", "38", etc.
+  season?: 'printemps_ete' | 'automne_hiver' | 'toute_saison' | null;
 
-  // Optional Financial & Insurance fields
+  // Optional Financial, Warranty & Receipt fields ("Compléter plus tard")
   purchase_price?: number | null; // Optional: 49.99 €
   purchase_date?: Date | null;
-  warranty_expiry?: Date | null;
+  warranty_expiry?: Date | null; // 2-year legal warranty tracking (Marc)
+  receipt_photo_url?: string | null; // Receipt / invoice photo
   brand?: string | null;
   notes?: string | null;
 
@@ -110,31 +110,36 @@ export interface IItem {
 import { z } from 'zod';
 
 export const fastAddItemSchema = z.object({
+  // Strictly 3 mandatory fields
   name: z.string().min(2, "Le nom doit comporter au moins 2 caractères").max(100),
   room_id: z.string().min(1, "La pièce est obligatoire"),
   category: z.enum([
-    'dressing',
+    'dressing_vetements',
     'meubles_deco',
     'electromenager',
-    'vaisselle',
+    'vaisselle_cuisine',
     'hightech',
     'outils_bricolage',
     'loisirs_livres',
     'autre'
   ]),
-  container_id: z.string().optional().nullable(),
+
+  // Optional fields (including photo)
   photo_url: z.string().optional().nullable(),
+  container_id: z.string().optional().nullable(),
   quantity: z.number().int().min(1).default(1),
   
-  // Optional dressing attributes
+  // Optional Dressing attributes
   dressing_status: z.enum(['active', 'dormant', 'to_sell_or_donate']).optional().nullable(),
+  clothing_type: z.string().optional().nullable(),
   size: z.string().optional().nullable(),
   season: z.enum(['printemps_ete', 'automne_hiver', 'toute_saison']).optional().nullable(),
 
-  // Optional finance / insurance attributes
+  // Optional Finance & Warranty attributes ("Compléter plus tard")
   purchase_price: z.number().min(0).optional().nullable(),
   purchase_date: z.string().datetime().optional().nullable(),
   warranty_expiry: z.string().datetime().optional().nullable(),
+  receipt_photo_url: z.string().optional().nullable(),
   brand: z.string().max(80).optional().nullable(),
   notes: z.string().max(500).optional().nullable(),
 });
@@ -149,16 +154,14 @@ export const fastAddItemSchema = z.object({
 db.items.createIndex({ household_id: 1, room_id: 1 });
 db.items.createIndex({ household_id: 1, category: 1 });
 db.items.createIndex({ household_id: 1, dressing_status: 1 });
-db.items.createIndex({ household_id: 1, name: "text" }); // Full-text search and anti-duplicate check
+db.items.createIndex({ household_id: 1, name: "text" }); // Anti-duplicate similarity search & full-text query
 
 // Rooms & Containers
 db.rooms.createIndex({ household_id: 1, order: 1 });
 db.containers.createIndex({ household_id: 1, room_id: 1 });
 
-// Households
+// Households & Users
 db.households.createIndex({ invite_code: 1 }, { unique: true });
-
-// Users
 db.users.createIndex({ email: 1 }, { unique: true });
 db.users.createIndex({ household_id: 1 });
 ```
