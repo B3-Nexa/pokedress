@@ -18,12 +18,12 @@ declare global {
 }
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
-  // Support both standard Bearer token and dev headers (for automated test harnesses)
+  // Bearer token everywhere; test headers only when NODE_ENV=test (set by Vitest) [CA-0.1, CA-0.2]
   const authHeader = req.headers.authorization;
   const devHouseholdId = req.headers['x-household-id'] as string;
   const devUserId = req.headers['x-user-id'] as string;
 
-  if (devHouseholdId && devUserId) {
+  if (config.nodeEnv === 'test' && devHouseholdId && devUserId) {
     req.user = {
       userId: devUserId,
       householdId: devHouseholdId,
