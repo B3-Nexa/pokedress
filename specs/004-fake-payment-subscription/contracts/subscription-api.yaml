@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: Household Subscription API
+  version: 1.0.0
+paths:
+  /api/household/subscription:
+    post:
+      summary: Changer le forfait d'abonnement du foyer
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan
+              properties:
+                plan:
+                  type: string
+                  enum: [free, premium]
+                billing_cycle:
+                  type: string
+                  enum: [monthly, yearly]
+      responses:
+        '200':
+          description: Abonnement mis à jour avec succès
+        '400':
+          description: Données invalides
+        '401':
+          description: Non authentifié

@@ -7,5 +7,6 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get('/', DashboardController.getHousehold);
+router.post('/subscription', DashboardController.updateSubscription);
 
 export default router;

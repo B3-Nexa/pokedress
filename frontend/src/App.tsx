@@ -13,6 +13,7 @@ import { AuthPage } from './pages/AuthPage.js';
 import { FastAddModal } from './components/fast-add/FastAddModal.js';
 import { DressingAddModal } from './components/dressing/DressingAddModal.js';
 import { ItemEnrichmentModal } from './components/inventory/ItemEnrichmentModal.js';
+import { SubscriptionModal } from './components/subscription/SubscriptionModal.js';
 import { Loader2 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -23,6 +24,7 @@ export const App: React.FC = () => {
   const [isFastAddOpen, setIsFastAddOpen] = useState(false);
   const [isDressingAddOpen, setIsDressingAddOpen] = useState(false);
   const [enrichmentItem, setEnrichmentItem] = useState<Item | null>(null);
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
 
   // App Data
   const [items, setItems] = useState<Item[]>([]);
@@ -102,6 +104,7 @@ export const App: React.FC = () => {
           setActiveTab={setActiveTab}
           onOpenFastAdd={() => setIsFastAddOpen(true)}
           onOpenDressingAdd={() => setIsDressingAddOpen(true)}
+          onOpenSubscription={() => setIsSubscriptionOpen(true)}
         />
 
         {/* Main Content Area: Responsive container up to max-w-7xl on desktop */}
@@ -135,6 +138,7 @@ export const App: React.FC = () => {
                 <DashboardPage
                   data={dashboardData}
                   onOpenFastAdd={() => setIsFastAddOpen(true)}
+                  onOpenSubscription={() => setIsSubscriptionOpen(true)}
                 />
               )}
 
@@ -144,6 +148,7 @@ export const App: React.FC = () => {
                   rooms={rooms}
                   onHouseholdUpdated={loadData}
                   onLogout={handleLogout}
+                  onOpenSubscription={() => setIsSubscriptionOpen(true)}
                 />
               )}
             </>
@@ -185,6 +190,14 @@ export const App: React.FC = () => {
             setEnrichmentItem(null);
             loadData();
           }}
+        />
+
+        {/* Fake Payment & Subscription Modal (US1 & US2) */}
+        <SubscriptionModal
+          isOpen={isSubscriptionOpen}
+          onClose={() => setIsSubscriptionOpen(false)}
+          household={household}
+          onSubscriptionUpdated={loadData}
         />
       </div>
     </ChainedAddProvider>

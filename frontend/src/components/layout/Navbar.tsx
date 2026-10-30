@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, AlertCircle, Plus, Home, Shirt, BarChart2, Users } from 'lucide-react';
+import { Copy, Check, AlertCircle, Plus, Home, Shirt, BarChart2, Users, Sparkles, Star } from 'lucide-react';
 import { Household } from '../../types/inventory.types.js';
 import { Logo } from '../common/Logo.js';
 
@@ -11,6 +11,7 @@ interface NavbarProps {
   setActiveTab?: (tab: 'overview' | 'dressing' | 'dashboard' | 'settings') => void;
   onOpenFastAdd?: () => void;
   onOpenDressingAdd?: () => void;
+  onOpenSubscription?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -21,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab,
   onOpenFastAdd,
   onOpenDressingAdd,
+  onOpenSubscription,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -38,6 +40,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'dashboard', label: 'Statistiques', icon: BarChart2 },
     { id: 'settings', label: 'Foyer', icon: Users },
   ] as const;
+
+  const isPremium = household?.plan === 'premium';
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3 shadow-sm">
@@ -80,19 +84,51 @@ export const Navbar: React.FC<NavbarProps> = ({
         )}
 
         {/* Right: Actions, Freemium Alert & Code */}
-        <div className="flex items-center gap-2.5">
-          {show90Warning && (
-            <div className="hidden lg:flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 rounded-full text-xs font-medium">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Freemium alert banner */}
+          {show90Warning && !isPremium && (
+            <button
+              onClick={onOpenSubscription}
+              title="Cliquer pour passer en Premium"
+              className="hidden lg:flex items-center gap-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer"
+            >
               <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
               <span>Plus que {Math.max(0, 100 - totalItems)} objets (gratuit)</span>
-            </div>
+            </button>
+          )}
+
+          {/* Subscription Badge / Trigger Button */}
+          {onOpenSubscription && (
+            <button
+              onClick={onOpenSubscription}
+              className={`touch-target px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs ${
+                isPremium
+                  ? 'bg-gradient-to-r from-purple-100 to-indigo-100 hover:from-purple-200 hover:to-indigo-200 text-purple-900 border border-purple-300'
+                  : 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300'
+              }`}
+              title={isPremium ? 'Gérer votre abonnement Premium' : "Découvrir l'offre PokeDress Premium"}
+            >
+              {isPremium ? (
+                <>
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
+                  <span className="hidden sm:inline">Formule</span>
+                  <span>Premium</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                  <span className="hidden sm:inline">Passer en</span>
+                  <span className="text-purple-700">Premium</span>
+                </>
+              )}
+            </button>
           )}
 
           {household?.invite_code && (
             <button
               onClick={handleCopyCode}
               title="Copier le code d'invitation du foyer"
-              className="touch-target px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="touch-target px-2.5 sm:px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
             >
               <span className="text-slate-400 hidden sm:inline">Code :</span>
               <span className="font-mono font-bold text-emerald-700">{household.invite_code}</span>

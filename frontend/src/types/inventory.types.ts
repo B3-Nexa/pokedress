@@ -51,6 +51,7 @@ export interface Household {
   name: string;
   invite_code: string;
   plan: 'free' | 'premium';
+  billing_cycle?: 'monthly' | 'yearly';
   item_count?: number;
   members?: Array<{ id: string; name: string; email: string; role: string }>;
 }
@@ -69,6 +70,7 @@ export interface DashboardData {
   };
   freemium: {
     plan: 'free' | 'premium';
+  billing_cycle?: 'monthly' | 'yearly';
     is_capped: boolean;
     show_warning: boolean;
     remaining_items: number | null;

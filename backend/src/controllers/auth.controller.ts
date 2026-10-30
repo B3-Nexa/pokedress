@@ -61,4 +61,21 @@ export class DashboardController {
       next(err);
     }
   }
+
+  static async updateSubscription(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const householdId = req.user!.householdId;
+      const { plan, billing_cycle } = req.body;
+
+      if (!plan || !['free', 'premium'].includes(plan)) {
+        res.status(400).json({ error: 'Le champ plan est obligatoire et doit être "free" ou "premium"' });
+        return;
+      }
+
+      const data = await HouseholdService.updateSubscription(householdId, { plan, billing_cycle });
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  }
 }

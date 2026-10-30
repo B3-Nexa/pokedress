@@ -84,6 +84,13 @@ export const api = {
     return apiFetch<Household>('/household');
   },
 
+  async updateSubscription(data: { plan: 'free' | 'premium'; billing_cycle?: 'monthly' | 'yearly' }): Promise<Household> {
+    return apiFetch<Household>('/household/subscription', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
   // Auth
   async register(data: { email: string; name: string; password: string; invite_code?: string; household_name?: string }) {
     const res = await apiFetch<any>('/auth/register', {

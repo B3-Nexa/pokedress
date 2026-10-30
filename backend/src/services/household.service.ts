@@ -182,4 +182,26 @@ export class HouseholdService {
       })),
     };
   }
+
+  /**
+   * Update subscription plan for a household
+   */
+  static async updateSubscription(
+    householdId: Types.ObjectId | string,
+    data: { plan: 'free' | 'premium'; billing_cycle?: 'monthly' | 'yearly' }
+  ): Promise<any> {
+    const household = await Household.findById(householdId);
+    if (!household) {
+      throw new Error('Foyer non trouvé');
+    }
+
+    if (!['free', 'premium'].includes(data.plan)) {
+      throw new Error('Plan invalide : doit être "free" ou "premium"');
+    }
+
+    household.plan = data.plan;
+    await household.save();
+
+    return this.getHousehold(householdId);
+  }
 }

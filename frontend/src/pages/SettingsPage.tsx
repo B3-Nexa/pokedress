@@ -12,6 +12,10 @@ import {
   X,
   AlertCircle,
   Loader2,
+  Sparkles,
+  Star,
+  CreditCard,
+  ArrowRight,
 } from 'lucide-react';
 import { api } from '../api/items.api.js';
 
@@ -20,6 +24,7 @@ interface SettingsPageProps {
   rooms: Room[];
   onHouseholdUpdated: () => void;
   onLogout: () => void;
+  onOpenSubscription?: () => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({
@@ -27,6 +32,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   rooms,
   onHouseholdUpdated,
   onLogout,
+  onOpenSubscription,
 }) => {
   const [copied, setCopied] = useState(false);
   const [newRoomName, setNewRoomName] = useState('');
@@ -87,7 +93,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
     setRoomSuccess(null);
     if (!editingRoomName.trim()) {
       setRoomError('Le nom de la pièce ne peut pas être vide');
-      return;
     }
 
     setIsUpdatingRoom(true);
@@ -147,6 +152,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
     if (lower.includes('balcon') || lower.includes('terrasse')) return '🌿';
     return '🚪';
   };
+
+  const isPremium = household?.plan === 'premium';
 
   return (
     <div className="space-y-6 pb-20 max-w-4xl mx-auto">
@@ -208,6 +215,63 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Subscription Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-slate-800 font-bold text-base sm:text-lg">
+            <CreditCard className="w-5 h-5 text-purple-600" />
+            <h2>Formule d'abonnement & Facturation</h2>
+          </div>
+          {isPremium ? (
+            <span className="flex items-center gap-1 text-xs font-extrabold text-purple-700 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" /> Formule Premium
+            </span>
+          ) : (
+            <span className="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+              Formule Gratuite
+            </span>
+          )}
+        </div>
+
+        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h4 className="font-bold text-slate-900 text-sm">
+              {isPremium
+                ? `PokeDress Premium (${household?.billing_cycle === 'yearly' ? '29,99 € / an' : '3,99 € / mois'})`
+                : 'PokeDress Découverte (0 € / pour toujours)'}
+            </h4>
+            <p className="text-xs text-slate-600 mt-1 max-w-lg">
+              {isPremium
+                ? 'Votre foyer profite des objets illimités, membres illimités et valorisations assurances.'
+                : 'Plafond freemium de 100 objets et 2 membres. Consultation et modification garanties à vie sans perte de données.'}
+            </p>
+          </div>
+
+          {onOpenSubscription && (
+            <button
+              onClick={onOpenSubscription}
+              className={`touch-target px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm self-start sm:self-auto flex-shrink-0 ${
+                isPremium
+                  ? 'bg-slate-900 hover:bg-slate-800 text-white'
+                  : 'bg-purple-600 hover:bg-purple-700 text-white shadow-purple-600/20'
+              }`}
+            >
+              {isPremium ? (
+                <>
+                  <span>Gérer mon abonnement</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 text-purple-200" />
+                  <span>Passer en Premium</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
 
