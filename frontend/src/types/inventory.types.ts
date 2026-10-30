@@ -85,3 +85,43 @@ export const CATEGORY_LABELS: Record<CategoryKey, { label: string; icon: string 
   loisirs_livres: { label: 'Loisirs & Livres', icon: 'book' },
   autre: { label: 'Autre', icon: 'package' },
 };
+
+export const CLOTHING_TYPES = [
+  'Haut / T-shirt / Chemise',
+  'Pantalon / Jeans',
+  'Pull / Sweat / Gilet',
+  'Robe / Combinaison',
+  'Veste / Manteau',
+  'Chaussures / Baskets',
+  'Sous-vêtements / Nuit',
+  'Accessoires / Sacs',
+  'Autre pièce',
+] as const;
+
+export const CLOTHING_SIZES = [
+  'XS',
+  'S',
+  'M',
+  'L',
+  'XL',
+  'XXL',
+  '34',
+  '36',
+  '38',
+  '40',
+  '42',
+  '44',
+  'Unique',
+] as const;
+
+export const SEASON_OPTIONS: Array<{ value: 'toute_saison' | 'printemps_ete' | 'automne_hiver'; label: string }> = [
+  { value: 'toute_saison', label: 'Toute l’année' },
+  { value: 'printemps_ete', label: 'Printemps / Été' },
+  { value: 'automne_hiver', label: 'Automne / Hiver' },
+];
+
+export const DRESSING_STATUS_OPTIONS: Array<{ value: DressingStatus; label: string; description: string }> = [
+  { value: 'active', label: 'Porté régulièrement (Actif)', description: 'Fait partie de votre rotation actuelle' },
+  { value: 'dormant', label: 'Dormant (au placard)', description: 'Non porté depuis plus de 6 mois' },
+  { value: 'to_sell_or_donate', label: 'À donner ou revendre', description: 'Prêt pour Vinted, dons ou vide-dressing' },
+];

@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Room Management API
+  version: 1.0.0
+paths:
+  /api/rooms/{id}:
+    patch:
+      summary: Modifier une pièce du foyer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 60
+                icon:
+                  type: string
+      responses:
+        '200':
+          description: Pièce mise à jour
+        '400':
+          description: Données invalides (ex: nom vide)
+        '404':
+          description: Pièce non trouvée dans le foyer
+    delete:
+      summary: Supprimer une pièce vide
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pièce supprimée
+        '400':
+          description: Pièce contenant des objets (suppression interdite)
+        '404':
+          description: Pièce non trouvée

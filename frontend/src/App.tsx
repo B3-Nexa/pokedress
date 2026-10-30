@@ -11,6 +11,7 @@ import { DashboardPage } from './pages/DashboardPage.js';
 import { SettingsPage } from './pages/SettingsPage.js';
 import { AuthPage } from './pages/AuthPage.js';
 import { FastAddModal } from './components/fast-add/FastAddModal.js';
+import { DressingAddModal } from './components/dressing/DressingAddModal.js';
 import { ItemEnrichmentModal } from './components/inventory/ItemEnrichmentModal.js';
 import { Loader2 } from 'lucide-react';
 
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
 
   // Modals state
   const [isFastAddOpen, setIsFastAddOpen] = useState(false);
+  const [isDressingAddOpen, setIsDressingAddOpen] = useState(false);
   const [enrichmentItem, setEnrichmentItem] = useState<Item | null>(null);
 
   // App Data
@@ -73,6 +75,14 @@ export const App: React.FC = () => {
     setIsAuthenticated(true);
   };
 
+  const handleOpenAdd = () => {
+    if (activeTab === 'dressing') {
+      setIsDressingAddOpen(true);
+    } else {
+      setIsFastAddOpen(true);
+    }
+  };
+
   if (!isAuthenticated) {
     return <AuthPage onAuthSuccess={handleAuthSuccess} />;
   }
@@ -83,15 +93,19 @@ export const App: React.FC = () => {
   return (
     <ChainedAddProvider>
       <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        {/* Navigation Bar Header */}
+        {/* Navigation Bar Header (Responsive with desktop tabs & actions) */}
         <Navbar
           household={household}
           totalItems={totalItemsCount}
           show90Warning={show90Warning}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenFastAdd={() => setIsFastAddOpen(true)}
+          onOpenDressingAdd={() => setIsDressingAddOpen(true)}
         />
 
-        {/* Main Content Area */}
-        <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-24">
+        {/* Main Content Area: Responsive container up to max-w-7xl on desktop */}
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-24 md:pb-12">
           {isLoading && items.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-16 text-slate-400 gap-3">
               <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
@@ -111,7 +125,7 @@ export const App: React.FC = () => {
               {activeTab === 'dressing' && (
                 <DressingPage
                   items={items}
-                  onOpenFastAdd={() => setIsFastAddOpen(true)}
+                  onOpenDressingAdd={() => setIsDressingAddOpen(true)}
                   onItemUpdated={loadData}
                   onSelectItem={(item) => setEnrichmentItem(item)}
                 />
@@ -136,14 +150,14 @@ export const App: React.FC = () => {
           )}
         </main>
 
-        {/* Mobile-first Bottom Navigation with 44px+ touch targets */}
+        {/* Mobile-first Bottom Navigation (Hidden on desktop md+, visible on mobile) */}
         <BottomNav
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          onOpenFastAdd={() => setIsFastAddOpen(true)}
+          onOpenAdd={handleOpenAdd}
         />
 
-        {/* Fast-Add Modal (< 10s add, < 5s chained add) */}
+        {/* Generic Item Fast-Add Modal (< 10s add, < 5s chained add) */}
         <FastAddModal
           isOpen={isFastAddOpen}
           onClose={() => setIsFastAddOpen(false)}
@@ -153,7 +167,17 @@ export const App: React.FC = () => {
           }}
         />
 
-        {/* Marc "Compléter plus tard" item enrichment modal */}
+        {/* Dedicated Dressing Modal (specific to clothing, lifecycle & metadata) */}
+        <DressingAddModal
+          isOpen={isDressingAddOpen}
+          onClose={() => setIsDressingAddOpen(false)}
+          rooms={rooms}
+          onItemAdded={() => {
+            loadData();
+          }}
+        />
+
+        {/* Item enrichment modal */}
         <ItemEnrichmentModal
           item={enrichmentItem}
           onClose={() => setEnrichmentItem(null)}

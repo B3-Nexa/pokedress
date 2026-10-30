@@ -81,7 +81,7 @@ export const RoomGroupView: React.FC<RoomGroupViewProps> = ({
 
             {/* Room Items List [CA-2.1, CA-2.5] */}
             {isExpanded && (
-              <div className="px-4 pb-4 pt-1 border-t border-slate-100 bg-slate-50/50 space-y-2">
+              <div className="px-4 pb-4 pt-3 border-t border-slate-100 bg-slate-50/50">
                 {roomItems.length === 0 ? (
                   <div className="text-center py-6">
                     <p className="text-xs text-slate-500 mb-2">Aucun objet dans cette pièce</p>
@@ -94,13 +94,15 @@ export const RoomGroupView: React.FC<RoomGroupViewProps> = ({
                     </button>
                   </div>
                 ) : (
-                  roomItems.map((item) => (
-                    <ItemCard
-                      key={item.id}
-                      item={item}
-                      onClick={() => onSelectItem(item)}
-                    />
-                  ))
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {roomItems.map((item) => (
+                      <ItemCard
+                        key={item.id}
+                        item={item}
+                        onClick={() => onSelectItem(item)}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
             )}

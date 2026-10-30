@@ -51,18 +51,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ data, onOpenFastAd
         </div>
       )}
 
-      {/* North Star Metric Card [CA-6.1] */}
-      <NorthStarCard totalItems={data.total_items} />
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* North Star Metric Card [CA-6.1] */}
+        <NorthStarCard totalItems={data.total_items} />
+
+        {/* Insurance Valuation [CA-6.4] */}
+        <InsuranceSummary
+          totalValue={data.total_value}
+          valueItemsCount={data.value_items_count}
+          totalItems={data.total_items}
+        />
+      </div>
 
       {/* Items Count by Room [CA-6.2] */}
       <RoomCountList itemsByRoom={data.items_by_room} onOpenFastAdd={onOpenFastAdd} />
-
-      {/* Insurance Valuation [CA-6.4] */}
-      <InsuranceSummary
-        totalValue={data.total_value}
-        valueItemsCount={data.value_items_count}
-        totalItems={data.total_items}
-      />
     </div>
   );
 };
