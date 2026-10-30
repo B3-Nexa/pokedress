@@ -8,5 +8,7 @@ router.use(authMiddleware);
 
 router.get('/', RoomController.getRooms);
 router.post('/', RoomController.createRoom);
+router.patch('/:id', RoomController.updateRoom);
+router.delete('/:id', RoomController.deleteRoom);
 
 export default router;

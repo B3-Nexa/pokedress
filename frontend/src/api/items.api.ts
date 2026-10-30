@@ -62,6 +62,19 @@ export const api = {
     });
   },
 
+  async updateRoom(id: string, data: { name?: string; icon?: string }): Promise<Room> {
+    return apiFetch<Room>(`/rooms/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async deleteRoom(id: string): Promise<{ message: string }> {
+    return apiFetch<{ message: string }>(`/rooms/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
   // Dashboard & Household
   async getDashboard(): Promise<DashboardData> {
     return apiFetch<DashboardData>('/dashboard');

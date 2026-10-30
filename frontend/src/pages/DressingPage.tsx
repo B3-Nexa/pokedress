@@ -4,22 +4,22 @@ import { DressingGallery } from '../components/dressing/DressingGallery.js';
 
 interface DressingPageProps {
   items: Item[];
-  onOpenFastAdd: () => void;
+  onOpenDressingAdd: () => void;
   onItemUpdated: () => void;
   onSelectItem: (item: Item) => void;
 }
 
 export const DressingPage: React.FC<DressingPageProps> = ({
   items,
-  onOpenFastAdd,
+  onOpenDressingAdd,
   onItemUpdated,
   onSelectItem,
 }) => {
   return (
-    <div className="pb-20">
+    <div className="pb-12">
       <DressingGallery
         items={items}
-        onOpenFastAdd={onOpenFastAdd}
+        onOpenDressingAdd={onOpenDressingAdd}
         onItemUpdated={onItemUpdated}
         onSelectItem={onSelectItem}
       />

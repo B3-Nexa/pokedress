@@ -52,4 +52,68 @@ export class RoomController {
       next(err);
     }
   }
+
+  static async updateRoom(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const householdId = req.user!.householdId;
+      const { id } = req.params;
+      const { name, icon } = req.body;
+
+      if (!name || name.trim().length === 0) {
+        res.status(400).json({ error: 'Le nom de la pièce est obligatoire' });
+        return;
+      }
+
+      const room = await Room.findOne({ _id: id, household_id: householdId });
+      if (!room) {
+        res.status(404).json({ error: 'Pièce introuvable dans ce foyer' });
+        return;
+      }
+
+      room.name = name.trim();
+      if (icon !== undefined) {
+        room.icon = icon;
+      }
+      await room.save();
+
+      const itemsCount = await Item.countDocuments({ household_id: householdId, room_id: id });
+
+      res.status(200).json({
+        id: room._id.toString(),
+        name: room.name,
+        icon: room.icon,
+        order: room.order,
+        item_count: itemsCount,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async deleteRoom(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const householdId = req.user!.householdId;
+      const { id } = req.params;
+
+      const room = await Room.findOne({ _id: id, household_id: householdId });
+      if (!room) {
+        res.status(404).json({ error: 'Pièce introuvable dans ce foyer' });
+        return;
+      }
+
+      const itemsCount = await Item.countDocuments({ household_id: householdId, room_id: id });
+      if (itemsCount > 0) {
+        res.status(400).json({
+          error: `Impossible de supprimer cette pièce car elle contient encore ${itemsCount} objet${itemsCount > 1 ? 's' : ''}. Veuillez d'abord déplacer ou supprimer ces objets.`,
+        });
+        return;
+      }
+
+      await Room.deleteOne({ _id: id, household_id: householdId });
+
+      res.status(200).json({ message: 'Pièce supprimée avec succès' });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

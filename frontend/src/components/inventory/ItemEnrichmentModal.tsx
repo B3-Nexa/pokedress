@@ -65,7 +65,7 @@ export const ItemEnrichmentModal: React.FC<ItemEnrichmentModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white w-full sm:max-w-lg rounded-2xl p-5 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>

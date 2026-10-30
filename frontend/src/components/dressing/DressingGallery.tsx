@@ -5,14 +5,14 @@ import { api } from '../../api/items.api.js';
 
 interface DressingGalleryProps {
   items: Item[];
-  onOpenFastAdd: () => void;
+  onOpenDressingAdd: () => void;
   onItemUpdated: () => void;
   onSelectItem: (item: Item) => void;
 }
 
 export const DressingGallery: React.FC<DressingGalleryProps> = ({
   items,
-  onOpenFastAdd,
+  onOpenDressingAdd,
   onItemUpdated,
   onSelectItem,
 }) => {
@@ -46,20 +46,31 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Dressing Header banner */}
-      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-4 text-white shadow-md">
-        <div className="flex items-center justify-between">
+      <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 rounded-2xl p-5 text-white shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-purple-200">
-              Catégorie Enrichie
-            </span>
-            <h2 className="text-lg font-bold">Dressing & Garde-robe</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-purple-200">
+                Catégorie Enrichie
+              </span>
+              <span className="text-sm">👗</span>
+            </div>
+            <h2 className="text-xl font-bold mt-0.5">Dressing & Garde-robe</h2>
             <p className="text-xs text-purple-100 mt-0.5">
               {clothes.length} pièces inventoriées dans le foyer
             </p>
           </div>
-          <span className="text-3xl">👗</span>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenDressingAdd}
+              className="touch-target px-4 py-2.5 bg-white text-purple-900 font-bold text-xs sm:text-sm rounded-xl shadow-sm hover:bg-purple-50 active:scale-95 transition-all flex items-center gap-1.5"
+            >
+              <span>+ Ajouter un vêtement</span>
+            </button>
+          </div>
         </div>
 
         {/* Decluttering potential banner */}
@@ -76,12 +87,12 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
       </div>
 
       {/* Filter Pills [CA-4.4] */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
         <button
           onClick={() => setFilterStatus('all')}
           className={`touch-target px-3.5 py-1.5 rounded-full font-semibold transition-colors flex-shrink-0 ${
             filterStatus === 'all'
-              ? 'bg-slate-900 text-white'
+              ? 'bg-slate-900 text-white shadow-sm'
               : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
           }`}
         >
@@ -92,7 +103,7 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
           onClick={() => setFilterStatus('active')}
           className={`touch-target px-3.5 py-1.5 rounded-full font-semibold transition-colors flex-shrink-0 ${
             filterStatus === 'active'
-              ? 'bg-emerald-600 text-white'
+              ? 'bg-emerald-600 text-white shadow-sm'
               : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
           }`}
         >
@@ -103,7 +114,7 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
           onClick={() => setFilterStatus('dormant')}
           className={`touch-target px-3.5 py-1.5 rounded-full font-semibold transition-colors flex-shrink-0 ${
             filterStatus === 'dormant'
-              ? 'bg-amber-600 text-white'
+              ? 'bg-amber-600 text-white shadow-sm'
               : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
           }`}
         >
@@ -114,7 +125,7 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
           onClick={() => setFilterStatus('to_sell_or_donate')}
           className={`touch-target px-3.5 py-1.5 rounded-full font-semibold transition-colors flex-shrink-0 ${
             filterStatus === 'to_sell_or_donate'
-              ? 'bg-purple-600 text-white'
+              ? 'bg-purple-600 text-white shadow-sm'
               : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
           }`}
         >
@@ -122,24 +133,24 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
         </button>
       </div>
 
-      {/* Clothing List */}
-      <div className="space-y-2">
-        {filteredClothes.length === 0 ? (
-          <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-            <span className="text-3xl block mb-2">✨</span>
-            <p className="text-sm font-semibold text-slate-700">Aucun vêtement dans cette vue</p>
-            <p className="text-xs text-slate-400 mt-1 mb-4">
-              Ajoutez vos vêtements en quelques secondes avec l’ajout rapide.
-            </p>
-            <button
-              onClick={onOpenFastAdd}
-              className="touch-target px-4 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl shadow hover:bg-emerald-700 transition-colors"
-            >
-              Ajouter un vêtement
-            </button>
-          </div>
-        ) : (
-          filteredClothes.map((item) => (
+      {/* Clothing List in Responsive Grid */}
+      {filteredClothes.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center max-w-lg mx-auto">
+          <span className="text-4xl block mb-2">👗</span>
+          <p className="text-base font-bold text-slate-800">Aucun vêtement dans cette vue</p>
+          <p className="text-xs text-slate-500 mt-1 mb-5">
+            Ajoutez vos vêtements et suivez votre garde-robe facilement.
+          </p>
+          <button
+            onClick={onOpenDressingAdd}
+            className="touch-target px-5 py-2.5 bg-purple-600 text-white text-xs font-bold rounded-xl shadow hover:bg-purple-700 transition-colors inline-flex items-center gap-1.5"
+          >
+            <span>+ Ajouter un premier vêtement</span>
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+          {filteredClothes.map((item) => (
             <div key={item.id} className="relative group">
               <ItemCard item={item} onClick={() => onSelectItem(item)} />
 
@@ -150,9 +161,9 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
                     onClick={(e) => handleQuickStatusChange(item.id, 'dormant', e)}
                     disabled={updatingId === item.id}
                     title="Marquer comme non porté depuis 6+ mois"
-                    className="touch-target px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[10px] font-bold rounded-md border border-amber-200 transition-colors"
+                    className="touch-target px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[10px] font-bold rounded-md border border-amber-200 transition-colors shadow-xs"
                   >
-                    Marquer dormant
+                    Dormant
                   </button>
                 )}
 
@@ -161,16 +172,16 @@ export const DressingGallery: React.FC<DressingGalleryProps> = ({
                     onClick={(e) => handleQuickStatusChange(item.id, 'to_sell_or_donate', e)}
                     disabled={updatingId === item.id}
                     title="Basculer vers la liste à revendre/donner"
-                    className="touch-target px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-800 text-[10px] font-bold rounded-md border border-purple-200 transition-colors"
+                    className="touch-target px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-800 text-[10px] font-bold rounded-md border border-purple-200 transition-colors shadow-xs"
                   >
                     À revendre
                   </button>
                 )}
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
