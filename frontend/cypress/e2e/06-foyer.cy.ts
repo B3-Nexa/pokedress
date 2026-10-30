@@ -43,8 +43,10 @@ describe('US5 : partage du foyer', () => {
 
       cy.goToTab('Foyer');
       cy.contains('Membres du Foyer (2 / 2 gratuits)').should('be.visible');
-      cy.contains('span.font-semibold', /^Léa$/).parents('.rounded-lg').first().should('contain', 'Créateur');
-      cy.contains('span.font-semibold', /^Marc$/).parents('.rounded-lg').first().should('contain', 'Membre');
+      const memberRow = (name: string) =>
+        cy.contains('span.font-semibold', new RegExp(`^${name}$`)).parents('.justify-between').first();
+      memberRow('Léa').should('contain', 'Créateur');
+      memberRow('Marc').should('contain', 'Membre');
 
       // … que Léa voit, et qui déclenche l'alerte doublon chez elle
       cy.visitAs(lea.token);
@@ -75,7 +77,7 @@ describe('US5 : partage du foyer', () => {
       cy.goToTab('Foyer');
       cy.get('input[placeholder^="Nom de la nouvelle pièce"]').type('Bureau');
       cy.contains('form', 'Ajouter').find('button[type="submit"]').click();
-      cy.contains('Gérer les pièces (6)').should('be.visible');
+      cy.contains('h2', /pièces \(6\)/).should('be.visible');
 
       cy.goToTab('Inventaire');
       groupCard('Bureau').should('contain', '0 objets');

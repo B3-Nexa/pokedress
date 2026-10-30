@@ -143,7 +143,8 @@ Cypress.Commands.add('openFastAdd', () => {
 });
 
 Cypress.Commands.add('goToTab', (label) => {
-  cy.get('nav').contains('button', label).click();
+  // Deux barres existent (desktop dans le header, mobile en bas) : on prend celle qui est visible
+  cy.get('nav:visible').contains('button', label).click();
 });
 
 export {};

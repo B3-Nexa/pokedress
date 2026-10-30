@@ -19,12 +19,12 @@ describe('US4 : dressing', () => {
   });
 
   it('change le statut en 1 clic et filtre par statut [CA-4.4, CA-4.5]', () => {
-    clothingRow('Robe à fleurs').contains('button', 'Marquer dormant').click();
+    clothingRow('Robe à fleurs').find('button[title^="Marquer comme non porté"]').click();
     cy.contains('button', 'Dormants (1)').click();
     cy.contains('h3', 'Robe à fleurs').should('be.visible');
     cy.contains('h3', 'Jean noir droit').should('not.exist');
 
-    clothingRow('Robe à fleurs').contains('button', 'À revendre').click();
+    clothingRow('Robe à fleurs').find('button[title^="Basculer vers la liste"]').click();
     cy.contains('button', 'À donner ou revendre (1)').click();
     cy.contains('h3', 'Robe à fleurs').should('be.visible');
     cy.contains('1 pièces prêtes à revendre').should('be.visible');
