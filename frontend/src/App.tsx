@@ -5,6 +5,7 @@ import { Item, Room, Household, DashboardData } from './types/inventory.types.js
 import { ChainedAddProvider } from './context/ChainedAddContext.js';
 import { Navbar } from './components/layout/Navbar.js';
 import { BottomNav } from './components/layout/BottomNav.js';
+import { Footer } from './components/layout/Footer.js';
 import { OverviewPage } from './pages/OverviewPage.js';
 import { DressingPage } from './pages/DressingPage.js';
 import { DashboardPage } from './pages/DashboardPage.js';
@@ -14,6 +15,8 @@ import { FastAddModal } from './components/fast-add/FastAddModal.js';
 import { DressingAddModal } from './components/dressing/DressingAddModal.js';
 import { ItemEnrichmentModal } from './components/inventory/ItemEnrichmentModal.js';
 import { SubscriptionModal } from './components/subscription/SubscriptionModal.js';
+import { LegalModal } from './components/legal/LegalModal.js';
+import { LegalTabKey } from './content/legalData.js';
 import { Loader2 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -25,6 +28,7 @@ export const App: React.FC = () => {
   const [isDressingAddOpen, setIsDressingAddOpen] = useState(false);
   const [enrichmentItem, setEnrichmentItem] = useState<Item | null>(null);
   const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
+  const [activeLegalTab, setActiveLegalTab] = useState<LegalTabKey | null>(null);
 
   // App Data
   const [items, setItems] = useState<Item[]>([]);
@@ -108,7 +112,7 @@ export const App: React.FC = () => {
         />
 
         {/* Main Content Area: Responsive container up to max-w-7xl on desktop */}
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-24 md:pb-12">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
           {isLoading && items.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-16 text-slate-400 gap-3">
               <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
@@ -155,6 +159,9 @@ export const App: React.FC = () => {
           )}
         </main>
 
+        {/* Interactive Global Footer with Legal Links & Compliance */}
+        <Footer onOpenLegal={(tab) => setActiveLegalTab(tab)} />
+
         {/* Mobile-first Bottom Navigation (Hidden on desktop md+, visible on mobile) */}
         <BottomNav
           activeTab={activeTab}
@@ -198,6 +205,14 @@ export const App: React.FC = () => {
           onClose={() => setIsSubscriptionOpen(false)}
           household={household}
           onSubscriptionUpdated={loadData}
+          onOpenLegal={(tab) => setActiveLegalTab(tab)}
+        />
+
+        {/* Legal Modal: CGV, CGU, Mentions Légales, RGPD */}
+        <LegalModal
+          isOpen={!!activeLegalTab}
+          initialTab={activeLegalTab || 'cgv'}
+          onClose={() => setActiveLegalTab(null)}
         />
       </div>
     </ChainedAddProvider>
