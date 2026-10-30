@@ -78,14 +78,16 @@ export const CategoryGroupView: React.FC<CategoryGroupViewProps> = ({ items, onS
 
             {/* Category Items List [CA-2.2] */}
             {isExpanded && (
-              <div className="px-4 pb-4 pt-1 border-t border-slate-100 bg-slate-50/50 space-y-2">
-                {catItems.map((item) => (
-                  <ItemCard
-                    key={item.id}
-                    item={item}
-                    onClick={() => onSelectItem(item)}
-                  />
-                ))}
+              <div className="px-4 pb-4 pt-3 border-t border-slate-100 bg-slate-50/50">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {catItems.map((item) => (
+                    <ItemCard
+                      key={item.id}
+                      item={item}
+                      onClick={() => onSelectItem(item)}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>

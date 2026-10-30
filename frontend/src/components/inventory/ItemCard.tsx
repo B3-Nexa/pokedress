@@ -15,7 +15,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
       onClick={onClick}
       role="button"
       tabIndex={0}
-      className="bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex gap-3 items-center"
+      className="bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex gap-3 items-center h-full"
     >
       {/* Thumbnail or neutral icon fallback [CA-2.4] */}
       <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 flex-shrink-0 flex items-center justify-center overflow-hidden">
@@ -55,6 +55,13 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
           )}
         </div>
 
+        {/* Clothing metadata if dressing item */}
+        {item.category === 'dressing_vetements' && (item.brand || item.size || item.clothing_type) && (
+          <p className="text-[11px] text-purple-700 font-medium truncate mt-0.5">
+            {[item.clothing_type, item.brand, item.size && `Taille ${item.size}`].filter(Boolean).join(' • ')}
+          </p>
+        )}
+
         <div className="flex flex-wrap items-center gap-1.5 mt-1">
           {/* Room badge */}
           {item.room_name && (
@@ -64,11 +71,13 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
             </span>
           )}
 
-          {/* Category badge */}
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">
-            <Tag className="w-2.5 h-2.5" />
-            <span className="truncate max-w-[120px]">{categoryInfo.label}</span>
-          </span>
+          {/* Category badge (only if not dressing to avoid redundancy in dressing view) */}
+          {item.category !== 'dressing_vetements' && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">
+              <Tag className="w-2.5 h-2.5" />
+              <span className="truncate max-w-[120px]">{categoryInfo.label}</span>
+            </span>
+          )}
 
           {/* Dressing status pill [CA-4.2, CA-4.4] */}
           {item.dressing_status === 'dormant' && (
