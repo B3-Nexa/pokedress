@@ -26,6 +26,10 @@ coverage/
 .cache/
 backend/.cache/
 
+# Cypress (captures et vidéos générées par les tests E2E)
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+
 # Uploads & User Media (Photos d'objets en local)
 uploads/
 backend/uploads/*
