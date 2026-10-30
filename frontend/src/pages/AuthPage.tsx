@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { api } from '../api/items.api.js';
 import { ArrowRight } from 'lucide-react';
+import { Logo } from '../components/common/Logo.js';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -63,10 +64,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     <div className="min-h-screen bg-slate-100 flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center items-center gap-3">
-          <div className="w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-            📦
-          </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">PokeDress</h1>
+          <Logo size="lg" variant="icon" />
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            Poke<span className="text-purple-600">Dress</span>
+          </h1>
         </div>
         <p className="mt-2 text-center text-sm text-slate-600 font-medium">
           L'inventaire universel de la maison sans prise de tête

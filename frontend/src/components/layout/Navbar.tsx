@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, AlertCircle, Plus, Home, Shirt, BarChart2, Users } from 'lucide-react';
 import { Household } from '../../types/inventory.types.js';
+import { Logo } from '../common/Logo.js';
 
 interface NavbarProps {
   household?: Household | null;
@@ -43,11 +44,11 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Left: Brand Identity */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-sm">
-            📦
-          </div>
+          <Logo size="md" variant="icon" />
           <div>
-            <h1 className="font-bold text-slate-900 leading-tight text-base sm:text-lg">PokeDress</h1>
+            <h1 className="font-extrabold text-slate-900 leading-tight text-base sm:text-lg">
+              Poke<span className="text-purple-600">Dress</span>
+            </h1>
             <p className="text-xs text-slate-500 font-medium">
               {household?.name || 'Inventaire du Foyer'}
             </p>
