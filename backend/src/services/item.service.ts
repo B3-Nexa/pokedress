@@ -107,8 +107,10 @@ export class ItemService {
     }
 
     if (filters.search && filters.search.trim().length > 0) {
-      const searchTerm = filters.search.trim();
-      const normSearch = normalizeText(searchTerm);
+      // Escape regex special characters: "câble (HDMI" must not crash the query
+      const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const searchTerm = escape(filters.search.trim());
+      const normSearch = escape(normalizeText(filters.search));
 
       // Search also matches room names [CA-3.7]
       const matchingRooms = await Room.find({
